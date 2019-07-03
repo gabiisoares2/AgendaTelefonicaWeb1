@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="agendatelefonicaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tbl_cliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DataNascimento" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DataAlteracao" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="tbl_cliente_telefone" Relationship="Self.fk_ID_cliente" FromRole="tbl_cliente" ToRole="tbl_cliente_telefone" />
+  </EntityType>
+  <EntityType Name="tbl_cliente_telefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descricao" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Numero" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdCliente" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="tbl_cliente" Relationship="Self.fk_ID_cliente" FromRole="tbl_cliente_telefone" ToRole="tbl_cliente" />
+  </EntityType>
+  <Association Name="fk_ID_cliente">
+    <End Role="tbl_cliente" Type="Self.tbl_cliente" Multiplicity="1" />
+    <End Role="tbl_cliente_telefone" Type="Self.tbl_cliente_telefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_cliente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tbl_cliente_telefone">
+        <PropertyRef Name="IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="agendatelefonicaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tbl_cliente" EntityType="Self.tbl_cliente" />
+    <EntitySet Name="tbl_cliente_telefone" EntityType="Self.tbl_cliente_telefone" />
+    <AssociationSet Name="fk_ID_cliente" Association="Self.fk_ID_cliente">
+      <End Role="tbl_cliente" EntitySet="tbl_cliente" />
+      <End Role="tbl_cliente_telefone" EntitySet="tbl_cliente_telefone" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,117 @@
+﻿@model AgendaTelefonica.DAO.Model.Cliente
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm())
+{
+<div class="coupon">
+    <div class="container">
+        <h3 class="text-center">Lista de Clientes</h3>
+    </div>
+    <a href="#" class="btn btn-dark btnAdc" data-toggle="modal" data-target="#cadastroCliente" value="Cadastrar">Cadastrar Novo Cliente</a>
+    <div class="row divPesquisa">
+        <div class="col-md-8">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Pesquisar</span>
+                </div>
+                <input type="text" name="Nome" class="form-control" placeholder="Pesquisar Usuário" />
+            </div>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-danger">
+                Buscar
+            </button>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-danger" onClick="VerTodos()">
+                Ver todos
+            </button>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">Código</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.ListaClientes)
+            {
+                <tr class="text-center">
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Nome</td>
+                    <td><a href="http://localhost:49805/Home/Detalhes/@item.Id" class="btn btn-light" id="@item.Id">Detalhes</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+}
+@using (Html.BeginForm())
+{
+    <div class="modal fade" id="cadastroCliente" tabindex="-1" role="dialog" aria-labelledby="cadastroCliente" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastro de Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Nome</span>
+                        </div>
+                        <input type="text" id="clienteNome" value="" class="form-control" name="Nome" maxlength="80" required />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Email</span>
+                        </div>
+                        <input type="email" id="clienteEmail" value="" class="form-control" name="Email" maxlength="80" required />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Data de Nascimento</span>
+                        </div>
+                        <input type="text" id="calendario" value="@DateTime.Now" class="calendario form-control" name="DataNascimento" maxlength="10" onkeypress="mascaraData(this, event)" />
+                    </div>
+                    <h6 class="text-center">Telefone para contato</h6>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Celular</span>
+                        </div>
+                        <input type="text" id="Celular" class="form-control" aria-label="Text input with checkbox" name="Celular" oninput = "mascara(this, 'Celular')">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Casa</span>
+                        </div>
+                        <input type="text" id="Casa" class="form-control" aria-label="Text input with checkbox" name="Casa" oninput = "mascara(this, 'Celular')">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Trabalho</span>
+                        </div>
+                        <input type="text" id="Trabalho" class="form-control" aria-label="Text input with checkbox" name="Trabalho" oninput = "mascara(this, 'Celular')">
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" onclick="FechaCadastro()" data-dismiss="modal" value="Cancelar">
+                    <input type="button" class="btn btn-danger" onclick="EnviaCadastro()" id="Cadastrar" value="Cadastrar">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Cliente.js" type="text/javascript"></script>
+

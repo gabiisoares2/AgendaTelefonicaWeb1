@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="agendatelefonicaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tbl_cliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="DataNascimento" Type="datetime" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tbl_cliente_telefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descricao" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Numero" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="IdCliente" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_ID_cliente">
+    <End Role="tbl_cliente" Type="Self.tbl_cliente" Multiplicity="1" />
+    <End Role="tbl_cliente_telefone" Type="Self.tbl_cliente_telefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_cliente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tbl_cliente_telefone">
+        <PropertyRef Name="IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="agendatelefonicaModelStoreContainer">
+    <EntitySet Name="tbl_cliente" EntityType="Self.tbl_cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_cliente_telefone" EntityType="Self.tbl_cliente_telefone" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_ID_cliente" Association="Self.fk_ID_cliente">
+      <End Role="tbl_cliente" EntitySet="tbl_cliente" />
+      <End Role="tbl_cliente_telefone" EntitySet="tbl_cliente_telefone" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

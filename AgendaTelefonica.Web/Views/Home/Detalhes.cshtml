@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "Detalhes || Agenda Telefônica";
+}
+
+<div class="card">
+    <div class="card-header text-center" style="font-size:25px;">
+        <i class="far fa-address-card"></i> @ViewBag.Nome
+    </div>
+    <div class="card-body text-justify">
+        <div class="posiDescricao">
+            <div>
+                <i class="fas fa-envelope-open-text"></i> e-mail: @ViewBag.Email
+            </div>
+            <div>
+                <i class="fas fa-calendar-week"></i> Data de Nascimento: @ViewBag.DataNascimento
+            </div>
+            @foreach (var item in ViewBag.Telefone)
+            {
+                if (item.Descricao == "Celular")
+                {
+                    <div>
+                        <i class="fas fa-mobile-alt"></i> Celular: @item.Numero <a href="@item.Id" class="btn btn-light" id="@item.Id" onclick="AcaoDeletar(this)" data-toggle="modal" data-target="#DeletaNumero"><i class="far fa-times-circle text-danger"></i></a>
+                    </div>
+                }
+                if (item.Descricao == "Casa")
+                {
+                    <div>
+                        <i class="fas fa-warehouse"></i> Casa: @item.Numero <a href="@item.Id" class="btn btn-light" id="@item.Id" onclick="AcaoDeletar(this)" data-toggle="modal" data-target="#DeletaNumero"><i class="far fa-times-circle text-danger"></i></a>
+                    </div>
+                }
+                if (item.Descricao == "Trabalho")
+                {
+                    <div>
+                        <i class="fas fa-briefcase"></i> Trabalho: @item.Numero <a href="@item.Id" class="btn btn-light" id="@item.Id" onclick="AcaoDeletar(this)" data-toggle="modal" data-target="#DeletaNumero"><i class="far fa-times-circle text-danger"></i></a>
+                    </div>
+                }
+            }
+        </div>
+        <div class="text-center">
+            <a href="@ViewBag.Id" class="btn btn-danger" id="@ViewBag.Id" onclick="alterarCliente(this)" data-toggle="modal" data-target="#Alterar" value="Alterar">Alterar</a>
+            <a href="@ViewBag.Id" class="btn btn-light" id="@ViewBag.Id" onclick="AcaoDeletar(this)" data-toggle="modal" data-target="#DeletarCliente">Excluir</a>
+        </div>
+    </div>
+    <div class="card-footer text-muted text-center" style="font-size:11px;">
+        <div>Data de Cadastro: @ViewBag.DataCadastro</div>
+        <div>Última alteração: @ViewBag.DataAlteracao</div>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    <div class="modal fade" id="Alterar" tabindex="-1" role="dialog" aria-labelledby="alterarCliente" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastro de Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="Id" name="Id" style="display:none;" value="@ViewBag.Id" />
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Nome</span>
+                        </div>
+                        <input type="text" id="clienteNome" class="form-control" name="Nome" maxlength="80" required />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Email</span>
+                        </div>
+                        <input type="email" id="clienteEmail" class="form-control" name="Email" maxlength="80" required />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Data de Nascimento</span>
+                        </div>
+                        <input type="text" id="calendario" class="calendario form-control" name="DataNascimento" maxlength="10" onkeypress="mascaraData(this, event)" />
+                    </div>
+                    <h6 class="text-center">Telefone para contato</h6>
+                    <input type="text" id="IdCel" name="IdCel" style="display:none;" value=""/>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Celular</span>
+                        </div>
+                        <input type="text" id="Celular" class="form-control" aria-label="Text input with checkbox" name="Celular" oninput="mascara(this, 'Celular')">
+                    </div>
+                    <input type="text" id="IdCasa" name="IdCasa" style="display:none;" value=""/>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Casa</span>
+                        </div>
+                        <input type="text" id="Casa" class="form-control" aria-label="Text input with checkbox" name="Casa" oninput="mascara(this, 'Celular')">
+                    </div>
+                    <input type="text" id="IdTrab" name="IdTrab" style="display:none;" value=""/>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Trabalho</span>
+                        </div>
+                        <input type="text" id="Trabalho" class="form-control" aria-label="Text input with checkbox" name="Trabalho" oninput="mascara(this, 'Celular')">
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" onclick="FechaCadastro()" data-dismiss="modal" value="Cancelar">
+                    <input type="button" class="btn btn-danger" onclick="EnviaAtualizacao()" id="alterar" value="Alterar">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="modal fade" id="DeletaNumero" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">Deseja realmente excluir?</div>
+                    <div id="IdDeletado" style="display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Não">
+                    <input type="button" class="btn btn-secondary" onclick="DeletarTelefone()" data-dismiss="modal" id="Deletar" value="Sim">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="DeletarCliente" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">Deseja realmente excluir?</div>
+                    <div id="IdDeletado" style="display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Não">
+                    <input type="button" class="btn btn-secondary" onclick="DeletarCliente()" data-dismiss="modal" id="Deletar" value="Sim">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/Detalhe.js" type="text/javascript"></script>
+
+
